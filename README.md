@@ -26,7 +26,7 @@ This README serves as a weekly journal of my month-long remote internship at **C
 - Built ingestion module to embed documents and store vectors.
 - Integrated FAISS for fast semantic search.
 - Connected models of ollama for grounded response generation.
-- Compared LLMs in terms of response tone and factual accuracy.
+- Compared LLMs in terms of response tone and actual accuracy.
 
 ### Week 3 (May 26 – June 1): Started building frontend
 - Started creating UI for hotel chatbot
@@ -77,7 +77,6 @@ A command-line chatbot that retrieves relevant document chunks using **FAISS** a
 ## Outcomes
 
 - Completed two impactful AI-based mini-projects
-- Understood full-stack development of LLM-powered apps
 - Developed clean, documented, and presentable solutions
 - Strengthened real-world problem-solving and remote collaboration skills
 
