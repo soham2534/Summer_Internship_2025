@@ -1,0 +1,12 @@
+{
+  "ollama_host": "http://localhost:11434",
+  "ollama_model": "gemma2:9b-instruct-q4_0",
+  "hotel_json_path": "json/hotel.json",
+  "audio_dir": "static/audio",
+  "date_pattern": [
+    "\\b(?:january|february|march|april|may|june|july|august|september|october|november|december)\\s+\\d{1,2}(?:st|nd|rd|th)?\\s*(?:to|-)\\s*\\d{1,2}(?:st|nd|rd|th)?\\b",
+    "\\b\\d{1,2}(?:st|nd|rd|th)?\\s+(?:january|february|march|april|may|june|july|august|september|october|november|december)\\s*(?:to|-)\\s*\\d{1,2}(?:st|nd|rd|th)?\\b",
+    "\\b\\d{4}-\\d{2}-\\d{2}\\s*(?:to|-)\\s*\\d{4}-\\d{2}-\\d{2}\\b",
+    "\\b\\d{1,2}/\\d{1,2}/\\d{4}\\s*(?:to|-)\\s*\\d{1,2}/\\d{1,2}/\\d{4}\\b"
+  ]
+}

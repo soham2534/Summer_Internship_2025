@@ -1,0 +1,729 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Hotel Booking Assistant</title>
+  <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+  <div class="main-wrapper">
+    <div class="container">
+      <header>
+        <h1>Hotel Booking Assistant</h1>
+      </header>
+      
+      <div class="chat-area" id="chat-area">
+        <!-- Messages will appear here -->
+      </div>
+      
+      <div id="loading-indicator">
+        <div class="typing-indicator">
+          <div class="typing-dot"></div>
+          <div class="typing-dot"></div>
+          <div class="typing-dot"></div>
+        </div>
+      </div>
+      
+      <div class="input-area">
+        <input 
+          type="text" 
+          id="user-input" 
+          placeholder="Type your message..."
+          autocomplete="off"
+        >
+        <div class="controls">
+          <button id="send-button">
+            <span class="button-icon">📤</span> Send
+          </button>
+          <button id="mic-button">
+            <span class="button-icon">🎙️</span> Speak
+          </button>
+          <button id="reset-button">
+            <span class="button-icon">🔄</span> Reset
+          </button>
+        </div>
+      </div>
+      
+      <div id="json-output"></div>
+    </div>
+
+    <!-- Hotels Sidebar -->
+    <div class="hotels-sidebar" id="hotels-sidebar">
+      <div class="sidebar-header">
+        <h3 id="sidebar-title">Available Hotels</h3>
+      </div>
+      <div class="sidebar-content" id="sidebar-content">
+        
+        <!-- Booking Form -->
+        <div class="booking-form" id="booking-form">
+          <div class="form-section">
+            <h4>Reservation</h4>
+            <div class="form-group">
+              <label for="check-in-date">Check-in date:</label>
+              <input type="date" id="check-in-date" class="form-control">
+            </div>
+            <div class="form-group">
+              <label for="check-out-date">Check-out date:</label>
+              <input type="date" id="check-out-date" class="form-control">
+            </div>
+            <div class="form-group">
+              <label>Guests:</label>
+              <div class="guests-input">
+                <div class="guest-counter">
+                  <button type="button" class="counter-btn" id="guests-minus">-</button>
+                  <span id="guest-count">1</span>
+                  <button type="button" class="counter-btn" id="guests-plus">+</button>
+                  <span style="margin-left: 8px; font-size: 13px; color: #666;"></span>
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <div class="form-section">
+            <h4>Guests</h4>
+            <div class="form-group">
+              <label>Guest Information</label>
+              <div class="guest-names" id="guest-names">
+                <div class="guest-name-input">
+                  <input type="text" placeholder="Guest 1 Name" class="form-control guest-name" data-guest="1">
+                </div>
+              </div>
+            </div>
+            <div class="form-group">
+              <label for="phone">Phone:</label>
+              <input type="tel" id="phone" class="form-control" placeholder="XXX-XXX-XXXX">
+            </div>
+            <div class="form-group">
+              <label for="email">Email:</label>
+              <input type="email" id="email" class="form-control" placeholder="Optional">
+            </div>
+          </div>
+
+          <div class="form-section">
+            <h4>Billing</h4>
+            <div class="price-section">
+              <div class="price-row">
+                <span>Total booking price:</span>
+                <span id="subtotal">$0.00</span>
+              </div>
+              <div class="price-row">
+                <span>Tax (15%):</span>
+                <span id="tax">$0.00</span>
+              </div>
+              <div class="price-row total">
+                <span>Net payable:</span>
+                <span id="total">$0.00</span>
+              </div>
+            </div>
+            <button class="confirm-booking-btn" id="confirm-booking" disabled>
+              Confirm Booking
+            </button>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <script>
+    const sessionId = Date.now().toString();
+    const API_URL = 'http://localhost:8000';
+    let currentAudio = null;
+    let isListening = false;
+    let recognition;
+    let currentHotels = [];
+    let selectedHotel = null;
+    let sessionData = {}; 
+    let bookingFormData = {
+      hotel: null,
+      checkIn: null,
+      checkOut: null,
+      guests: 1,
+      guestNames: [],
+      phone: null,
+      email: null
+    };
+
+    // Check supports speech recognition
+    const SpeechRecognition = window.SpeechRecognition || window.webkitSpeechRecognition;
+    const hasSpeechRecognition = !!SpeechRecognition;
+
+    if (!hasSpeechRecognition) {
+      document.getElementById('mic-button').style.display = 'none';
+    } else {
+      // Initialize speech recognition
+      recognition = new SpeechRecognition();
+      recognition.continuous = true;
+      recognition.interimResults = false;
+      recognition.lang = 'en-US';
+
+      recognition.onresult = function(event) {
+        const transcript = event.results[0][0].transcript;
+        document.getElementById('user-input').value = transcript;
+        stopListening();
+        sendMessage(transcript);
+      };
+
+      recognition.onerror = function(event) {
+        console.error('Speech recognition error', event.error);
+        stopListening();
+      };
+
+      recognition.onend = function() {
+        stopListening();
+      };
+    }
+
+    // Initialize the chat with a welcome message
+    window.addEventListener('DOMContentLoaded', () => {
+      addMessage('Welcome to the Hotel Booking Assistant! How can I help you today?', 'bot');
+      initializeFormListeners();
+    });
+
+    // Event listeners
+    document.getElementById('send-button').addEventListener('click', handleSendButtonClick);
+    document.getElementById('user-input').addEventListener('keypress', function(event) {
+      if (event.key === 'Enter') {
+        handleSendButtonClick();
+      }
+    });
+
+    document.getElementById('mic-button').addEventListener('click', toggleListening);
+    document.getElementById('reset-button').addEventListener('click', resetChat);
+
+    // Initialize form listeners
+    function initializeFormListeners() {
+      // Guest counter buttons
+      document.getElementById('guests-plus').addEventListener('click', () => {
+        const maxGuests = bookingFormData.hotel?.number_of_guests || 10;
+        if (bookingFormData.guests < maxGuests) {
+          bookingFormData.guests++;
+          updateGuestCount();
+          updateGuestNameInputs();
+          updatePricing();
+        }
+      });
+
+      document.getElementById('guests-minus').addEventListener('click', () => {
+        if (bookingFormData.guests > 1) {
+          bookingFormData.guests--;
+          updateGuestCount();
+          updateGuestNameInputs();
+          updatePricing();
+        }
+      });
+
+      // Date inputs
+      document.getElementById('check-in-date').addEventListener('change', (e) => {
+        bookingFormData.checkIn = e.target.value;
+        updatePricing();
+        validateForm();
+      });
+
+      document.getElementById('check-out-date').addEventListener('change', (e) => {
+        bookingFormData.checkOut = e.target.value;
+        updatePricing();
+        validateForm();
+      });
+
+      // Phone input
+      document.getElementById('phone').addEventListener('input', (e) => {
+        bookingFormData.phone = e.target.value;
+        validateForm();
+      });
+
+      // Email input
+      document.getElementById('email').addEventListener('input', (e) => {
+        bookingFormData.email = e.target.value;
+      });
+
+      // Confirm booking button
+      document.getElementById('confirm-booking').addEventListener('click', submitBooking);
+    }
+
+    function updateGuestCount() {
+      document.getElementById('guest-count').textContent = bookingFormData.guests;
+      
+      // Update buttons state
+      document.getElementById('guests-minus').disabled = bookingFormData.guests <= 1;
+      const maxGuests = bookingFormData.hotel?.number_of_guests || 10;
+      document.getElementById('guests-plus').disabled = bookingFormData.guests >= maxGuests;
+    }
+
+    function updateGuestNameInputs() {
+      const container = document.getElementById('guest-names');
+      container.innerHTML = '';
+      
+      for (let i = 1; i <= bookingFormData.guests; i++) {
+        const div = document.createElement('div');
+        div.className = 'guest-name-input';
+        div.innerHTML = `
+          <input type="text" placeholder="Guest ${i} Name" class="form-control guest-name" data-guest="${i}" value="${bookingFormData.guestNames[i-1] || ''}">
+        `;
+        container.appendChild(div);
+        
+        
+        const input = div.querySelector('input');
+        input.addEventListener('input', (e) => {
+          bookingFormData.guestNames[i-1] = e.target.value;
+          validateForm();
+        });
+      }
+    }
+
+    function updatePricing() {
+      if (!bookingFormData.hotel || !bookingFormData.checkIn || !bookingFormData.checkOut) {
+        return;
+      }
+
+      const checkIn = new Date(bookingFormData.checkIn);
+      const checkOut = new Date(bookingFormData.checkOut);
+      const nights = Math.ceil((checkOut - checkIn) / (1000 * 60 * 60 * 24));
+      
+      if (nights <= 0) return;
+
+      const pricePerNight = bookingFormData.hotel.price_per_night;
+      const subtotal = nights * pricePerNight;
+      const tax = subtotal * 0.15;
+      const total = subtotal + tax;
+
+      document.getElementById('subtotal').textContent = `$${subtotal.toFixed(2)}`;
+      document.getElementById('tax').textContent = `$${tax.toFixed(2)}`;
+      document.getElementById('total').textContent = `$${total.toFixed(2)}`;
+    }
+
+    function validateForm() {
+      const isValid = bookingFormData.hotel &&
+                     bookingFormData.checkIn &&
+                     bookingFormData.checkOut &&
+                     bookingFormData.phone &&
+                     bookingFormData.guestNames.length === bookingFormData.guests &&
+                     bookingFormData.guestNames.every(name => name.trim() !== '');
+
+      document.getElementById('confirm-booking').disabled = !isValid;
+    }
+
+    function showBookingForm(hotel) {
+      bookingFormData.hotel = hotel;
+      
+      // sidebar title with hotel name
+      document.getElementById('sidebar-title').textContent = `Booking - ${hotel.hotel_name}`;
+      document.getElementById('booking-form').classList.add('show');
+      
+  
+      const hotelCards = document.querySelector('.hotel-cards');
+      if (hotelCards) {
+        hotelCards.style.display = 'none';
+      }
+      
+      document.getElementById('hotels-sidebar').classList.add('show');
+      populateFormFromSession();
+      updateGuestCount();
+      updateGuestNameInputs();
+      updatePricing();
+      validateForm();
+    }
+
+    function populateFormFromSession() {
+      
+      if (sessionData.check_in) {
+        const checkInDate = formatDateForInput(sessionData.check_in);
+        document.getElementById('check-in-date').value = checkInDate;
+        bookingFormData.checkIn = checkInDate;
+      }
+      
+      if (sessionData.check_out) {
+        const checkOutDate = formatDateForInput(sessionData.check_out);
+        document.getElementById('check-out-date').value = checkOutDate;
+        bookingFormData.checkOut = checkOutDate;
+      }
+      
+      if (sessionData.num_guests) {
+        bookingFormData.guests = sessionData.num_guests;
+      }
+      
+      if (sessionData.guest_names && sessionData.guest_names.length > 0) {
+        bookingFormData.guestNames = [...sessionData.guest_names];
+      }
+      
+      if (sessionData.phone) {
+        document.getElementById('phone').value = sessionData.phone;
+        bookingFormData.phone = sessionData.phone;
+      }
+      
+      if (sessionData.email) {
+        document.getElementById('email').value = sessionData.email;
+        bookingFormData.email = sessionData.email;
+      }
+    }
+
+    function formatDateForInput(dateString) {
+      if (!dateString) return '';
+      
+      const months = {
+        'january': '01', 'jan': '01',
+        'february': '02', 'feb': '02',
+        'march': '03', 'mar': '03',
+        'april': '04', 'apr': '04',
+        'may': '05',
+        'june': '06', 'jun': '06',
+        'july': '07', 'jul': '07',
+        'august': '08', 'aug': '08',
+        'september': '09', 'sep': '09',
+        'october': '10', 'oct': '10',
+        'november': '11', 'nov': '11',
+        'december': '12', 'dec': '12'
+      };
+      
+      if (/^\d{4}-\d{2}-\d{2}$/.test(dateString)) {
+        return dateString;
+      }
+      
+      const dateMatch = dateString.toLowerCase().match(/(\d{1,2})\s+([a-z]+)/);
+      if (dateMatch) {
+        const day = dateMatch[1].padStart(2, '0');
+        const monthName = dateMatch[2];
+        const month = months[monthName];
+        if (month) {
+          const currentYear = new Date().getFullYear();
+          return `${currentYear}-${month}-${day}`;
+        }
+      }
+      
+      return dateString;
+    }
+
+    function populateFormFromChat(data) {
+      
+      sessionData = { ...sessionData, ...data };
+    
+      const bookingForm = document.getElementById('booking-form');
+      if (bookingForm.classList.contains('show')) {
+        populateFormFromSession();
+        updateGuestCount();
+        updateGuestNameInputs();
+        updatePricing();
+        validateForm();
+      }
+    }
+    
+
+    function selectHotelFromChat(hotelName) {
+      const hotel = currentHotels.find(h => h.hotel_name.toLowerCase() === hotelName.toLowerCase());
+      if (hotel) {
+        addMessage(`Selected ${hotel.hotel_name}. Please fill out the booking form.`, 'bot');
+        
+        showBookingForm(hotel);
+        
+        const hotelCards = document.querySelectorAll('.hotel-card');
+        hotelCards.forEach(card => {
+          const cardHotelName = card.querySelector('.hotel-name').textContent;
+          if (cardHotelName === hotel.hotel_name) {
+            card.classList.add('selected');
+          } else {
+            card.classList.remove('selected');
+          }
+        });
+      }
+    }
+
+    async function submitBooking() {
+      try {
+        const bookingDetails = {
+          hotel_name: bookingFormData.hotel.hotel_name,
+          room_type: bookingFormData.hotel.hotel_name,
+          check_in: bookingFormData.checkIn,
+          check_out: bookingFormData.checkOut,
+          guests: bookingFormData.guests,
+          guest_names: bookingFormData.guestNames,
+          phone: bookingFormData.phone,
+          location: bookingFormData.hotel.location
+        };
+
+        const response = await fetch(`${API_URL}/confirm/${sessionId}`, {
+          method: 'POST',
+          headers: {
+            'Content-Type': 'application/json'
+          },
+          body: JSON.stringify(bookingDetails)
+        });
+
+        if (!response.ok) {
+          throw new Error('Booking confirmation failed');
+        }
+
+        const data = await response.json();
+        
+        // Display final booking
+        if (data.final && data.json) {
+          displayFinalBooking(data.json);
+        }
+
+        // Play audio if available
+        if (data.audio_url) {
+          if (currentAudio) {
+            currentAudio.pause();
+            currentAudio.currentTime = 0;
+          }
+          currentAudio = new Audio(`${API_URL}${data.audio_url}`);
+          currentAudio.play();
+        }
+
+      } catch (error) {
+        console.error('Booking submission error:', error);
+        addMessage('Sorry, there was an error processing your booking. Please try again.', 'bot');
+      }
+    }
+
+    // Functions 
+    function handleSendButtonClick() {
+      const userInput = document.getElementById('user-input').value.trim();
+      if (userInput) {
+        sendMessage(userInput);
+      }
+    }
+
+    function toggleListening() {
+      if (isListening) {
+        stopListening();
+      } else {
+        startListening();
+      }
+    }
+
+    function startListening() {
+      try {
+        recognition.start();
+        isListening = true;
+        document.getElementById('mic-button').classList.add('mic-active');
+        document.getElementById('mic-button').innerHTML = '<span class="button-icon">🎙️</span> Listening...';
+      } catch (error) {
+        console.error('Failed to start speech recognition:', error);
+      }
+    }
+
+    function stopListening() {
+      try {
+        recognition.stop();
+      } catch (error) {
+        console.error('Failed to stop speech recognition:', error);
+      }
+      isListening = false;
+      document.getElementById('mic-button').classList.remove('mic-active');
+      document.getElementById('mic-button').innerHTML = '<span class="button-icon">🎙️</span> Speak';
+    }
+
+    async function sendMessage(message) {
+      
+      if (selectedHotel) {
+        message = selectedHotel.hotel_name;
+        selectedHotel = null;
+      }
+    
+      addMessage(message, 'user');
+      document.getElementById('user-input').value = '';
+      document.getElementById('loading-indicator').style.display = 'block';
+    
+      try {
+        const response = await fetch(`${API_URL}/chat/${sessionId}`, {
+          method: 'POST',
+          headers: {
+            'Content-Type': 'application/json'
+          },
+          body: JSON.stringify({ message })
+        });
+    
+        if (!response.ok) {
+          throw new Error('Network response was not ok');
+        }
+    
+        const data = await response.json();
+        document.getElementById('loading-indicator').style.display = 'none';
+        addMessage(data.reply, 'bot');
+    
+      
+        // Display hotels in sidebar 
+        if (data.hotels && data.hotels.length > 0) {
+          currentHotels = data.hotels;
+          displayHotels(data.hotels);
+        }
+
+        // Handle session data for form population
+        if (data.session_data) {
+          populateFormFromChat(data.session_data);
+        }
+
+        // Check if hotel selected in chat
+        if (data.selected_hotel && selectedHotel !== data.selected_hotel) {
+          selectHotelFromChat(data.selected_hotel);
+        }
+        
+        if (data.selected_hotel && !document.getElementById('booking-form').classList.contains('show')) {
+          const hotel = currentHotels.find(h => h.hotel_name.toLowerCase() === data.selected_hotel.toLowerCase());
+          if (hotel) {
+            showBookingForm(hotel); 
+          }
+        }
+
+        // Display final booking
+        if (data.final && data.json) {
+          displayFinalBooking(data.json);
+        }
+
+        // Play audio if available
+        if (data.audio_url) {
+          if (currentAudio) {
+            currentAudio.pause();
+            currentAudio.currentTime = 0;
+          }
+          currentAudio = new Audio(`${API_URL}${data.audio_url}`);
+          currentAudio.play();
+        }
+
+        } catch (error) {
+        console.error('Error:', error);
+        document.getElementById('loading-indicator').style.display = 'none';
+        addMessage('Sorry, I encountered an error. Please try again.', 'bot');
+        }
+        }
+
+        function addMessage(message, sender) {
+        const chatArea = document.getElementById('chat-area');
+        const messageDiv = document.createElement('div');
+        messageDiv.className = `message ${sender}-message`;
+        messageDiv.textContent = message;
+        chatArea.appendChild(messageDiv);
+        chatArea.scrollTop = chatArea.scrollHeight;
+        }
+
+        function displayHotels(hotels) {
+        const sidebar = document.getElementById('hotels-sidebar');
+        const sidebarContent = document.getElementById('sidebar-content');
+        const bookingForm = document.getElementById('booking-form');
+
+        bookingForm.classList.remove('show');
+        document.getElementById('sidebar-title').textContent = 'Available Hotels';
+
+        // Create hotel cards container
+        let hotelCardsContainer = sidebarContent.querySelector('.hotel-cards');
+        if (!hotelCardsContainer) {
+        hotelCardsContainer = document.createElement('div');
+        hotelCardsContainer.className = 'hotel-cards';
+        sidebarContent.insertBefore(hotelCardsContainer, bookingForm);
+        }
+
+        hotelCardsContainer.innerHTML = '';
+        hotelCardsContainer.style.display = 'flex';
+
+        hotels.forEach((hotel, index) => {
+        const hotelCard = document.createElement('div');
+        hotelCard.className = 'hotel-card';
+        hotelCard.innerHTML = `
+          <img src="${API_URL}${hotel.image_url}" alt="${hotel.hotel_name}" class="hotel-image" onerror="this.classList.add('error'); this.innerHTML='No Image Available';">
+          <div class="hotel-info">
+            <div class="hotel-name">${hotel.hotel_name}</div>
+            <div class="hotel-price">$${hotel.price_per_night}/night</div>
+            <div class="hotel-location">📍 ${hotel.location}</div>
+            <div class="hotel-guests">👥 Up to ${hotel.number_of_guests} guests</div>
+            <div class="hotel-desc">${hotel.description}</div>
+          </div>
+        `;
+
+        hotelCard.addEventListener('click', () => {
+          document.querySelectorAll('.hotel-card').forEach(card => {
+            card.classList.remove('selected');
+          });
+          
+          // Select this card
+          hotelCard.classList.add('selected');
+          addMessage(`I've selected ${hotel.hotel_name} for you. Please fill out the booking form.`, 'bot');
+          showBookingForm(hotel);
+        });
+
+        hotelCardsContainer.appendChild(hotelCard);
+        });
+
+        // Show sidebar
+        sidebar.classList.add('show');
+        }
+
+        function displayFinalBooking(bookingData) {
+        const chatArea = document.getElementById('chat-area');
+        const bookingDiv = document.createElement('div');
+        bookingDiv.className = 'final-booking';
+
+        bookingDiv.innerHTML = `
+        <h3>🎉 Booking Confirmed!</h3>
+        <div class="booking-details">
+          <img src="${API_URL}${bookingData.image_url || '/static/images/default-hotel.jpg'}" 
+              alt="${bookingData.hotel_name}" class="booking-image">
+          <div>
+            <strong class="json-property">Hotel:</strong> 
+            <span class="json-value">${bookingData.hotel_name}</span><br>
+            <strong class="json-property">Dates:</strong> 
+            <span class="json-value">${bookingData.check_in} to ${bookingData.check_out}</span><br>
+            <strong class="json-property">Guests:</strong> 
+            <span class="json-value">${bookingData.guests}</span><br>
+            <strong class="json-property">Phone:</strong> 
+            <span class="json-value">${bookingData.phone}</span><br>
+            <strong class="json-property">Location:</strong> 
+            <span class="json-value">${bookingData.location}</span>
+          </div>
+        </div>
+        `;
+
+        chatArea.appendChild(bookingDiv);
+        chatArea.scrollTop = chatArea.scrollHeight;
+
+        // booking confirmation
+        setTimeout(() => {
+          bookingDiv.classList.add('show');
+        }, 100);
+
+        // Display JSON output
+        //const jsonOutput = document.getElementById('json-output');
+        //jsonOutput.innerHTML = `
+        //<h4>Booking Details (JSON):</h4>
+        //<pre>${JSON.stringify(bookingData, null, 2)}</pre>
+        //`;
+        //jsonOutput.style.display = 'block';
+        }
+
+        function resetChat() {
+        // Clear chat area
+        document.getElementById('chat-area').innerHTML = '';
+
+      
+        document.getElementById('hotels-sidebar').classList.remove('show');
+
+        // Hide JSON output
+        document.getElementById('json-output').style.display = 'none';
+
+        // Reset form data
+        bookingFormData = {
+          hotel: null,
+          checkIn: null,
+          checkOut: null,
+          guests: 1,
+          guestNames: [],
+          phone: null,
+          email: null
+        };
+
+        // Reset session data
+        sessionData = {};
+
+        // Reset other variables
+        currentHotels = [];
+        selectedHotel = null;
+        // Stop any playing audio
+        if (currentAudio) {
+          currentAudio.pause();
+          currentAudio.currentTime = 0;
+        }
+        // Add welcome message
+        addMessage('Welcome to the Hotel Booking Assistant! How can I help you today?', 'bot');
+        }
+  </script>
+</body>
+</html>

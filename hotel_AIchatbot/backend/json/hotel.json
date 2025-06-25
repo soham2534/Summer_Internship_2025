@@ -1,0 +1,546 @@
+[
+  {
+    "hotel_name": "Vineyard Solitude Chamber",
+    "price_per_night": 180,
+    "description": "Perfect for the solo traveler seeking tranquility and comfort, this single room boasts a luxurious bed, a state of the art air conditioning system, and a breathtaking city view.",
+    "amenities": [],
+    "facilities": [],
+    "number_of_guests": 1,
+    "location": "Jaipur, Rajasthan",
+    "image_url": "/static/images/hotel1.jpg"
+  },
+  {
+    "hotel_name": "Oak Haven Twin",
+    "price_per_night": 250,
+    "description": "A double room with panoramic views, offering guests the luxury of space and an array of amenities including a fireplace, tea and coffee maker, and a comfortable seating area.",
+    "amenities": [
+      "High-speed Wi-Fi",
+      "Two Smart TVs",
+      "Mini-bar with wine/champagne",
+      "Espresso machine",
+      "In-room safe",
+      "Bathrobe and slippers"
+    ],
+    "facilities": [
+      "Private balcony with seating",
+      "Fireplace for a cozy atmosphere",
+      "Upper floors accessible by stairs only",
+      "Air conditioning with individual climate control",
+      "24-hour room service"
+    ],
+    "number_of_guests": 2,
+    "location": "Udaipur, Rajasthan",
+    "image_url": "/static/images/hotel2.jpg"
+  },
+  {
+    "hotel_name": "Harvest Moon Suite",
+    "price_per_night": 550,
+    "description": "Our Executive Suite is a sanctuary of elegance and comfort, featuring a king-sized bed, a separate living area, and a luxurious bathroom. The suite is designed to provide an unparalleled hospitality experience.",
+    "amenities": [],
+    "facilities": [],
+    "number_of_guests": 3,
+    "location": "Mumbai, Maharashtra",
+    "image_url": "/static/images/hotel3.jpg"
+  },
+  {
+    "hotel_name": "Dwarkadhish Lords Eco Inn",
+    "price_per_night": 2800,
+    "description": "A boutique hotel reflecting the charm of the Lord Krishna era, offering panoramic sea views and easy access to major attractions.",
+    "amenities": [
+      "Free Wi-Fi",
+      "Flat-panel television",
+      "Coffee maker",
+      "Air conditioning",
+      "Writing desk"
+    ],
+    "facilities": [
+      "Restaurant",
+      "Fitness centre",
+      "Conference hall",
+      "Laundry service", 
+      "Parking facility",
+      "Lift",
+      "Hot water",
+      "CCTV",
+      "24-hour room service"
+    ],
+    "number_of_guests": 4,
+    "location": "Dwarka, Gujarat",
+    "image_url": "/static/images/hotel4.jpg"
+  },
+  {
+    "hotel_name": "Hotel Gopal",
+    "price_per_night": 1800,
+    "description": "A centrally located hotel offering comfortable accommodations with a view of the ocean from the rooftop, within walking distance to the Dwarkadhish Temple.",
+    "amenities": [
+      "Free Wi-Fi",
+      "Flat-screen TV",
+      "Tea/coffee maker",
+      "In-room safe"
+    ],
+    "facilities": [
+      "Restaurant",
+      "24-hour room service",
+      "Parking",
+      "Laundry service"
+    ],
+    "number_of_guests": 3,
+    "location": "Dwarka, Gujarat",
+    "image_url": "/static/images/hotel5.jpg"
+  },
+  {
+    "hotel_name": "Club Mahindra Dwarka Resort & Spa",
+    "price_per_night": 5500,
+    "description": "A resort offering elegant rooms with tasteful furnishings, a mini-fridge, dry kitchenette, and a range of wellness facilities.",
+    "amenities": [
+      "Tea/coffee maker",
+      "Mini-fridge",
+      "Hair dryer",
+      "LCD/LED TV with satellite channels",
+      "Telephone",
+      "Wardrobe",
+      "Dry kitchenette in suites"
+    ],
+    "facilities": [
+      "Restaurant (Jeeman)",
+      "Spa",
+      "Wi-Fi in common areas"
+    ],
+    "number_of_guests": 5,
+    "location": "Dwarka, Gujarat",
+    "image_url": "/static/images/hotel6.jpg"
+  },
+  {
+    "hotel_name": "The Grand Dwarika Hotel",
+    "price_per_night": 4000,
+    "description": "A hotel inspired by ancient architecture, featuring intricately designed interiors, sprawling gardens, and proximity to the Dwarkadhish Temple.",
+    "amenities": [
+      "Free Wi-Fi",
+      "Flat-screen TV",
+      "Tea/coffee maker",
+      "Air conditioning"
+    ],
+    "facilities": [
+      "Multi-cuisine restaurant with open-air terrace",
+      "Spa",
+      "Water sports activities",
+      "Artisanal workshops"
+    ],
+    "number_of_guests": 4,
+    "location": "Dwarka, Gujarat",
+    "image_url": "/static/images/hotel7.jpg"
+  },
+  {
+    "hotel_name": "Hotel Guruprerna",
+    "price_per_night": 2000,
+    "description": "A budget-friendly hotel offering cozy rooms and warm hospitality, located within a 5-minute walk to the Dwarkadhish Temple.",
+    "amenities": [
+      "Free Wi-Fi",
+      "Flat-screen TV",
+      "Air conditioning"
+    ],
+    "facilities": [
+      "On-site restaurant",
+      "24-hour front desk"
+    ],
+    "number_of_guests": 2,
+    "location": "Dwarka, Gujarat",
+    "image_url": "/static/images/hotel8.jpg"
+  },
+  {
+    "hotel_name": "Hotel Dwarka Residency",
+    "price_per_night": 2500,
+    "description": "A hotel offering well-appointed rooms with modern amenities, including a rooftop restaurant providing panoramic city views.",
+    "amenities": [
+      "Free Wi-Fi",
+      "Flat-screen TV",
+      "Air conditioning"
+    ],
+    "facilities": [
+      "Fitness centre",
+      "Rooftop restaurant",
+      "24-hour front desk"
+    ],
+    "number_of_guests": 3,
+    "location": "Dwarka, Gujarat",
+    "image_url": "/static/images/hotel9.jpg"
+  },
+  {
+    "hotel_name": "Hotel Rudra Plaza",
+    "price_per_night": 2200,
+    "description": "A hotel combining affordability and convenience, located within walking distance to the Dwarkadhish Temple and local attractions.",
+    "amenities": [
+      "Free Wi-Fi",
+      "Flat-screen TV",
+      "Air conditioning"
+    ],
+    "facilities": [
+      "24-hour front desk",
+      "Daily housekeeping",
+      "Luggage storage"
+    ],
+    "number_of_guests": 2,
+    "location": "Dwarka, Gujarat",
+    "image_url": "/static/images/hotel10.jpg"
+  },
+  {
+    "hotel_name": "Hotel Damji",
+    "price_per_night": 2800,
+    "description": "A 3-star hotel immersed in cultural charm, featuring traditional architecture and decor, with an in-house restaurant serving authentic Gujarati cuisine.",
+    "amenities": [
+      "Free Wi-Fi",
+      "Flat-screen TV",
+      "Air conditioning"
+    ],
+    "facilities": [
+      "Rooftop terrace",
+      "Ample parking space",
+      "Calm atmosphere"
+    ],
+    "number_of_guests": 3,
+    "location": "Dwarka, Gujarat",
+    "image_url": "/static/images/hotel2.jpg"
+  },
+  {
+    "hotel_name": "Hotel Lord Krishna",
+    "price_per_night": 1400,
+    "description": "A standard hotel offering comfortable accommodations with essential amenities, located close to the city centre.",
+    "amenities": [
+      "Free Wi-Fi",
+      "LCD TV",
+      "Geyser"
+    ],
+    "facilities": [
+      "Restaurant",
+      "Parking"
+    ],
+    "number_of_guests": 2,
+    "location": "Mathura, Uttar Pradesh",
+    "image_url": "/static/images/hotel2.jpg"
+  },
+  {
+    "hotel_name": "Hotel Leuba Patell Samaz",
+    "price_per_night": 1600,
+    "description": "A standard hotel providing essential amenities and services, situated 1.8 km from the city centre.",
+    "amenities": [
+      "Free Wi-Fi",
+      "LCD TV",
+      "Geyser"
+    ],
+    "facilities": [
+      "Restaurant",
+      "Parking"
+    ],
+    "number_of_guests": 2,
+    "location": "Surat, Gujarat",
+    "image_url": "/static/images/hotel2.jpg"
+  },
+  {
+    "hotel_name": "The House of MG",
+    "price_per_night": 4200,
+    "description": "A heritage hotel that offers a blend of old-world charm and modern amenities, located in the heart of Ahmedabad.",
+    "amenities": [
+      "Free Wi-Fi",
+      "Flat-screen TV",
+      "Mini-bar",
+      "Air conditioning",
+      "Tea/coffee maker"
+    ],
+    "facilities": [
+      "24-hour room service",
+      "Spa and wellness centre",
+      "Swimming pool",
+      "Restaurant and bar",
+      "Conference rooms"
+    ],
+    "number_of_guests": 4,
+    "location": "Ahmedabad, Gujarat",
+    "image_url": "/static/images/hotel2.jpg"
+  },
+  {
+    "hotel_name": "Four Points by Sheraton",
+    "price_per_night": 3900,
+    "description": "Contemporary hotel with spacious rooms and great city views, ideal for both business and leisure travelers.",
+    "amenities": [
+      "Free Wi-Fi",
+      "Flat-screen TV",
+      "Coffee maker",
+      "In-room safe",
+      "Work desk"
+    ],
+    "facilities": [
+      "Fitness center",
+      "Swimming pool",
+      "Business center",
+      "Restaurant",
+      "24-hour front desk"
+    ],
+    "number_of_guests": 3,
+    "location": "Ahmedabad, Gujarat",
+    "image_url": "/static/images/hotel2.jpg"
+  },
+  {
+    "hotel_name": "Hyatt Regency Ahmedabad",
+    "price_per_night": 5500,
+    "description": "Luxury hotel with elegantly furnished rooms, offering exceptional dining and wellness options.",
+    "amenities": [
+      "Free Wi-Fi",
+      "LED TV",
+      "Mini-bar",
+      "Coffee machine",
+      "Air conditioning"
+    ],
+    "facilities": [
+      "Spa",
+      "Outdoor pool",
+      "Fitness centre",
+      "Multiple dining venues",
+      "Conference halls"
+    ],
+    "number_of_guests": 5,
+    "location": "Ahmedabad, Gujarat",
+    "image_url": "/static/images/hotel2.jpg"
+  },
+  {
+    "hotel_name": "Lemon Tree Premier",
+    "price_per_night": 3500,
+    "description": "Modern hotel with vibrant decor, offering easy access to key attractions and business hubs.",
+    "amenities": [
+      "Free Wi-Fi",
+      "Flat-screen TV",
+      "Tea/coffee maker",
+      "Air conditioning",
+      "Mini-bar"
+    ],
+    "facilities": [
+      "Restaurant",
+      "Bar",
+      "Fitness center",
+      "Conference room",
+      "Parking"
+    ],
+    "number_of_guests": 3,
+    "location": "Chennai, Tamil Nadu",
+    "image_url": "/static/images/hotel2.jpg"
+  },
+  {
+    "hotel_name": "Radisson Blu Hotel Ahmedabad",
+    "price_per_night": 4600,
+    "description": "Upscale hotel featuring chic interiors, a large pool, and various dining options, situated in the commercial district.",
+    "amenities": [
+      "Free Wi-Fi",
+      "Flat-screen TV",
+      "Mini-bar",
+      "Coffee maker",
+      "Air conditioning"
+    ],
+    "facilities": [
+      "Swimming pool",
+      "Spa",
+      "Fitness center",
+      "Business center",
+      "24-hour room service"
+    ],
+    "number_of_guests": 4,
+    "location": "Ahmedabad, Gujarat",
+    "image_url": "/static/images/hotel2.jpg"
+  },
+  {
+    "hotel_name": "The Fern Residency",
+    "price_per_night": 3200,
+    "description": "Eco-friendly hotel with comfortable rooms and a peaceful atmosphere, close to Rajkot city centre.",
+    "amenities": [
+      "Free Wi-Fi",
+      "Flat-screen TV",
+      "Air conditioning",
+      "Tea/coffee maker"
+    ],
+    "facilities": [
+      "Restaurant",
+      "Fitness centre",
+      "Conference hall",
+      "Parking"
+    ],
+    "number_of_guests": 3,
+    "location": "Rajkot, Gujarat",
+    "image_url": "/static/images/hotel2.jpg"
+  },
+  {
+    "hotel_name": "Hotel Imperial Palace",
+    "price_per_night": 2800,
+    "description": "A budget hotel providing clean and spacious rooms with essential amenities and easy city access.",
+    "amenities": [
+      "Free Wi-Fi",
+      "Air conditioning",
+      "Flat-screen TV"
+    ],
+    "facilities": [
+      "Restaurant",
+      "Room service",
+      "Parking"
+    ],
+    "number_of_guests": 2,
+    "location": "Kolkata, West Bengal",
+    "image_url": "/static/images/hotel2.jpg"
+  },
+  {
+    "hotel_name": "Fortune Park JPS Grand",
+    "price_per_night": 4100,
+    "description": "Well-appointed rooms in a premium hotel, featuring an on-site restaurant and event spaces.",
+    "amenities": [
+      "Free Wi-Fi",
+      "Flat-screen TV",
+      "Mini-bar",
+      "Air conditioning",
+      "Tea/coffee maker"
+    ],
+    "facilities": [
+      "Restaurant",
+      "Banquet hall",
+      "Fitness center",
+      "Parking"
+    ],
+    "number_of_guests": 4,
+    "location": "Lucknow, Uttar Pradesh",
+    "image_url": "/static/images/hotel2.jpg"
+  },
+  {
+    "hotel_name": "Hotel Royal Orchid Rajkot",
+    "price_per_night": 3700,
+    "description": "Contemporary hotel with comfortable rooms and a serene ambiance, close to business districts.",
+    "amenities": [
+      "Free Wi-Fi",
+      "Flat-screen TV",
+      "Mini-bar",
+      "Air conditioning"
+    ],
+    "facilities": [
+      "Restaurant",
+      "Spa",
+      "Fitness centre",
+      "Conference room"
+    ],
+    "number_of_guests": 3,
+    "location": "Rajkot, Gujarat",
+    "image_url": "/static/images/hotel2.jpg"
+  },
+  {
+    "hotel_name": "Hotel Shree Krishna",
+    "price_per_night": 2100,
+    "description": "Simple and affordable accommodation, offering convenient amenities for budget travelers.",
+    "amenities": [
+      "Free Wi-Fi",
+      "Air conditioning",
+      "Flat-screen TV"
+    ],
+    "facilities": [
+      "Restaurant",
+      "Parking"
+    ],
+    "number_of_guests": 2,
+    "location": "Vrindavan, Uttar Pradesh",
+    "image_url": "/static/images/hotel2.jpg"
+  },
+  {
+    "hotel_name": "The Gateway Hotel Akota Gardens",
+    "price_per_night": 4700,
+    "description": "Luxury hotel nestled amidst lush gardens, offering elegant rooms and superior facilities.",
+    "amenities": [
+      "Free Wi-Fi",
+      "Flat-screen TV",
+      "Mini-bar",
+      "Tea/coffee maker",
+      "Air conditioning"
+    ],
+    "facilities": [
+      "Swimming pool",
+      "Spa",
+      "Fitness centre",
+      "Restaurant",
+      "Conference hall"
+    ],
+    "number_of_guests": 5,
+    "location": "Vadodara, Gujarat",
+    "image_url": "/static/images/hotel2.jpg"
+  },
+  {
+    "hotel_name": "Express Inn Vadodara",
+    "price_per_night": 2600,
+    "description": "Comfortable mid-range hotel featuring modern rooms and convenient location near the railway station.",
+    "amenities": [
+      "Free Wi-Fi",
+      "Flat-screen TV",
+      "Air conditioning",
+      "Tea/coffee maker"
+    ],
+    "facilities": [
+      "Restaurant",
+      "Parking",
+      "Room service"
+    ],
+    "number_of_guests": 3,
+    "location": "Vadodara, Gujarat",
+    "image_url": "/static/images/hotel2.jpg"
+  },
+  {
+    "hotel_name": "Hotel Express Towers",
+    "price_per_night": 2900,
+    "description": "Well-maintained hotel offering practical amenities for business and leisure travelers.",
+    "amenities": [
+      "Free Wi-Fi",
+      "Flat-screen TV",
+      "Mini-bar",
+      "Air conditioning"
+    ],
+    "facilities": [
+      "Restaurant",
+      "Business centre",
+      "Parking"
+    ],
+    "number_of_guests": 3,
+    "location": "Pune, Maharashtra",
+    "image_url": "/static/images/hotel2.jpg"
+  },
+  {
+    "hotel_name": "Sayaji Hotel Vadodara",
+    "price_per_night": 5200,
+    "description": "Iconic heritage hotel known for its spacious rooms, excellent service, and grand architecture.",
+    "amenities": [
+      "Free Wi-Fi",
+      "Flat-screen TV",
+      "Mini-bar",
+      "Tea/coffee maker",
+      "Air conditioning"
+    ],
+    "facilities": [
+      "Swimming pool",
+      "Spa",
+      "Fitness centre",
+      "Conference hall",
+      "Restaurant"
+    ],
+    "number_of_guests": 5,
+    "location": "Vadodara, Gujarat",
+    "image_url": "/static/images/hotel2.jpg"
+  },
+  {
+    "hotel_name": "Regenta Central Antarim Vadodara",
+    "price_per_night": 3000,
+    "description": "Stylish hotel providing modern comforts and efficient service near the city center.",
+    "amenities": [
+      "Free Wi-Fi",
+      "Flat-screen TV",
+      "Mini-bar",
+      "Air conditioning",
+      "Tea/coffee maker"
+    ],
+    "facilities": [
+      "Restaurant",
+      "Fitness center",
+      "Parking"
+    ],
+    "number_of_guests": 3,
+    "location": "Vadodara, Gujarat",
+    "image_url": "/static/images/hotel2.jpg"
+  }
+]
