@@ -35,9 +35,6 @@ This README serves as a weekly journal of my month-long remote internship at **C
 - integrated backend with frontend
 - testing work
 - UI updation
-- Finalized documentation for end-users and developers.
-- Participated in final demo presentation to mentor.
-- Learned about model behavior, testing, and deployment best practices.
 
 ### Week 5 (June 9 – June 13): Final review 
 - Finalized documentation .
